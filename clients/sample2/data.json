@@ -1,0 +1,16 @@
+{
+  "clientName": "サンプル2",
+  "char": {
+    "name": "ソリン",
+    "central": "char_central.png",
+    "bustX": 40,
+    "bustY": 30
+  },
+  "params": {
+    "north": 60,
+    "east": 85,
+    "south": 90,
+    "west": 55,
+    "central": 65
+  }
+}
