@@ -1855,7 +1855,7 @@ body {
       <button class="home-btn" id="btnVillage">村長の家へ</button>
       <button class="home-btn disabled">準備中</button>
     </div>
-    <div class="home-version">α ver. 0.2.18</div>
+    <div class="home-version">α ver. 0.2.19</div>
   </div>
 
   <!-- FVについて テキストページオーバーレイ -->
@@ -2006,7 +2006,13 @@ const $ = (id) => document.getElementById(id);
 // ── クライアント読み込み ──
 const urlParams = new URLSearchParams(window.location.search);
 const clientId = urlParams.get('c') || 'sample';
-const clientBase = `clients/${clientId}/`;
+
+const appBase =
+  window.location.hostname.endsWith("github.io")
+    ? "/FV-trial/"
+    : "./";
+
+const clientBase = `${appBase}clients/${clientId}/`;
 
 const CLIENT = {
   char: { name: "ロアン", central: "char_central.png" },
@@ -2999,7 +3005,10 @@ function hideCharSelect() {
 function showCharCard() {
   $("charSelect").classList.remove("visible");
   const cardImage = CLIENT.char.card || CLIENT.char.central || "char_central.png";
-  $("charCardImage").src = clientBase + cardImage + "?v=20260513a";
+  const src = clientBase + cardImage + "?v=" + Date.now();
+  console.log("charCardImage src:", src);
+  console.log("CLIENT.char:", CLIENT.char);
+  $("charCardImage").src = src;
   $("charCard").classList.add("show");
   $("btnHomeFixed").classList.add("visible");
 }
