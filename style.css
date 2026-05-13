@@ -529,8 +529,10 @@ body {
 @media (max-width: 430px) {
   .title-screen-image {
     background-image: url("common/title_mobile.png");
-    background-size: 100% auto;
+    background-size: auto 100%;
     background-position: center top;
+    background-repeat: no-repeat;
+    background-color: #21120d;
   }
   .title-tap {
     bottom: 92px;
