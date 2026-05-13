@@ -962,23 +962,23 @@ body {
 }
 .char-card-scroll {
   position: absolute;
-  inset: 14px;
+  inset: 10px;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  border-radius: 18px;
+  border-radius: 20px;
 }
 .char-card-inner {
   background:
-    radial-gradient(circle at 72% 12%, rgba(255,245,218,0.38), transparent 28%),
-    linear-gradient(175deg, rgba(248,232,198,0.96), rgba(218,188,148,0.96)),
+    radial-gradient(circle at 72% 8%, rgba(255,245,218,0.42), transparent 26%),
+    linear-gradient(175deg, rgba(248,232,198,0.97), rgba(215,185,145,0.97)),
     url("common/parchment.png");
   background-size: cover, cover, cover;
-  border: 2px solid rgba(120, 70, 76, 0.85);
-  border-radius: 18px;
+  border: 2px solid rgba(118,68,72,0.88);
+  border-radius: 20px;
   box-shadow:
-    0 0 0 1px rgba(216,185,120,0.45) inset,
+    0 0 0 1px rgba(216,185,120,0.48) inset,
     0 28px 56px rgba(0,0,0,0.55);
-  padding: 20px 16px 24px;
+  padding: 18px 16px 22px;
   min-height: 100%;
   position: relative;
   overflow: hidden;
@@ -986,103 +986,114 @@ body {
 .char-card-inner::before {
   content: "";
   position: absolute;
-  inset: 8px;
-  border: 1px solid rgba(148,102,52,0.42);
-  border-radius: 13px;
+  inset: 7px;
+  border: 1px solid rgba(148,96,52,0.40);
+  border-radius: 14px;
   pointer-events: none;
 }
 .char-card-header {
   text-align: center;
-  padding: 4px 0 12px;
-  border-bottom: 1px solid rgba(140,88,58,0.35);
-  margin-bottom: 14px;
+  padding: 2px 0 10px;
+  border-bottom: 1px solid rgba(138,82,52,0.32);
+  margin-bottom: 0;
+  position: relative;
+  z-index: 2;
 }
 .char-card-compass {
-  font-size: 18px;
-  color: rgba(140,80,58,0.72);
-  margin-bottom: 4px;
+  font-size: 16px;
+  color: rgba(130,72,52,0.70);
+  margin-bottom: 2px;
 }
 .char-card-name {
-  font-size: 20px;
+  font-size: 21px;
   font-weight: 600;
-  letter-spacing: 0.22em;
-  color: rgba(48,26,24,0.94);
+  letter-spacing: 0.24em;
+  color: rgba(44,22,20,0.95);
   font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
-  text-shadow: 0 1px 0 rgba(255,255,255,0.45);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.5);
 }
 .char-card-role {
   font-size: 11px;
-  letter-spacing: 0.15em;
-  color: rgba(100,62,44,0.75);
-  margin-top: 4px;
+  letter-spacing: 0.14em;
+  color: rgba(96,58,40,0.74);
+  margin-top: 3px;
   font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
 }
+/* メインボディ：キャラ画像を右に絶対配置、テキストは左に流す */
 .char-card-body {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-}
-.char-card-text {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.char-card-section-title {
-  font-size: 11.5px;
-  font-weight: 600;
-  color: rgba(100,54,46,0.9);
-  letter-spacing: 0.08em;
-  margin-bottom: 3px;
-  font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
-}
-.char-card-section-body {
-  font-size: 11px;
-  line-height: 1.85;
-  color: rgba(38,22,18,0.88);
-  letter-spacing: 0.03em;
-  font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
+  position: relative;
+  min-height: 360px;
+  margin-top: 12px;
 }
 .char-card-image-wrap {
-  width: 42%;
-  flex-shrink: 0;
-  position: relative;
+  position: absolute;
+  right: -4px;
+  top: -8px;
+  width: 46%;
+  pointer-events: none;
 }
 .char-card-image {
   width: 100%;
   height: auto;
   object-fit: contain;
-  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.38));
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.30));
   mix-blend-mode: multiply;
 }
+.char-card-text {
+  width: 56%;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  position: relative;
+  z-index: 2;
+}
+.char-card-section-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: rgba(96,50,42,0.92);
+  letter-spacing: 0.07em;
+  margin-bottom: 3px;
+  font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
+}
+.char-card-section-body {
+  font-size: 11.5px;
+  line-height: 1.9;
+  color: rgba(34,18,14,0.88);
+  letter-spacing: 0.02em;
+  font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
+}
 .char-card-quote {
-  margin-top: 16px;
-  border: 1.5px solid rgba(88,58,108,0.72);
+  margin-top: 18px;
+  border: 1.5px solid rgba(82,52,104,0.70);
   border-radius: 10px;
   padding: 12px 16px;
-  background: rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.20);
   text-align: center;
+  position: relative;
+  z-index: 2;
 }
 .char-card-quote-inner {
-  font-size: 13px;
-  line-height: 1.9;
-  color: rgba(48,26,52,0.9);
-  letter-spacing: 0.08em;
+  font-size: 13.5px;
+  line-height: 2.0;
+  color: rgba(44,22,52,0.92);
+  letter-spacing: 0.07em;
   font-style: italic;
   font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
 }
 .char-card-close {
   display: block;
   margin: 16px auto 0;
-  padding: 9px 28px;
+  padding: 10px 30px;
   border-radius: 999px;
-  border: 1px solid rgba(216,185,120,0.52);
-  background: rgba(20,10,28,0.82);
-  color: rgba(255,235,195,0.88);
+  border: 1px solid rgba(216,185,120,0.55);
+  background: rgba(18,8,26,0.84);
+  color: rgba(255,235,195,0.90);
   font-size: 12px;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
   cursor: pointer;
+  position: relative;
+  z-index: 2;
   -webkit-tap-highlight-color: transparent;
 }
 /* ── end キャラクターカード ── */
