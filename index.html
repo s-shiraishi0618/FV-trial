@@ -941,6 +941,152 @@ body {
   cursor: not-allowed;
   pointer-events: none;
 }
+
+/* ── キャラクターカードオーバーレイ ── */
+.char-card-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  background: rgba(10, 6, 18, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 500ms ease, visibility 0s linear 500ms;
+  overflow: hidden;
+}
+.char-card-overlay.show {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 500ms ease;
+}
+.char-card-scroll {
+  position: absolute;
+  inset: 14px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 18px;
+}
+.char-card-inner {
+  background:
+    radial-gradient(circle at 72% 12%, rgba(255,245,218,0.38), transparent 28%),
+    linear-gradient(175deg, rgba(248,232,198,0.96), rgba(218,188,148,0.96)),
+    url("common/parchment.png");
+  background-size: cover, cover, cover;
+  border: 2px solid rgba(120, 70, 76, 0.85);
+  border-radius: 18px;
+  box-shadow:
+    0 0 0 1px rgba(216,185,120,0.45) inset,
+    0 28px 56px rgba(0,0,0,0.55);
+  padding: 20px 16px 24px;
+  min-height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.char-card-inner::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(148,102,52,0.42);
+  border-radius: 13px;
+  pointer-events: none;
+}
+.char-card-header {
+  text-align: center;
+  padding: 4px 0 12px;
+  border-bottom: 1px solid rgba(140,88,58,0.35);
+  margin-bottom: 14px;
+}
+.char-card-compass {
+  font-size: 18px;
+  color: rgba(140,80,58,0.72);
+  margin-bottom: 4px;
+}
+.char-card-name {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: rgba(48,26,24,0.94);
+  font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.45);
+}
+.char-card-role {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: rgba(100,62,44,0.75);
+  margin-top: 4px;
+  font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
+}
+.char-card-body {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.char-card-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.char-card-section-title {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: rgba(100,54,46,0.9);
+  letter-spacing: 0.08em;
+  margin-bottom: 3px;
+  font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
+}
+.char-card-section-body {
+  font-size: 11px;
+  line-height: 1.85;
+  color: rgba(38,22,18,0.88);
+  letter-spacing: 0.03em;
+  font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
+}
+.char-card-image-wrap {
+  width: 42%;
+  flex-shrink: 0;
+  position: relative;
+}
+.char-card-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.38));
+  mix-blend-mode: multiply;
+}
+.char-card-quote {
+  margin-top: 16px;
+  border: 1.5px solid rgba(88,58,108,0.72);
+  border-radius: 10px;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.22);
+  text-align: center;
+}
+.char-card-quote-inner {
+  font-size: 13px;
+  line-height: 1.9;
+  color: rgba(48,26,52,0.9);
+  letter-spacing: 0.08em;
+  font-style: italic;
+  font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
+}
+.char-card-close {
+  display: block;
+  margin: 16px auto 0;
+  padding: 9px 28px;
+  border-radius: 999px;
+  border: 1px solid rgba(216,185,120,0.52);
+  background: rgba(20,10,28,0.82);
+  color: rgba(255,235,195,0.88);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+/* ── end キャラクターカード ── */
+
 .char-tag {
   font-size: 10px;
   color: rgba(255, 238, 218, 0.45);
@@ -1457,7 +1603,51 @@ body {
       <button class="char-btn disabled">西エリア代表<span class="char-tag">準備中</span></button>
       <button class="char-btn disabled">南エリア代表<span class="char-tag">準備中</span></button>
       <button class="char-btn disabled">北エリア代表<span class="char-tag">準備中</span></button>
-      <button class="char-btn disabled">中央エリア代表<span class="char-tag">準備中</span></button>
+      <button class="char-btn" id="btnCentralChar">中央エリア代表</button>
+    </div>
+  </div>
+
+  <!-- キャラクターカード：ロアン -->
+  <div id="charCard" class="char-card-overlay">
+    <div class="char-card-scroll">
+      <div class="char-card-inner">
+        <div class="char-card-header">
+          <div class="char-card-compass">✦</div>
+          <div class="char-card-name">－ ロアン －</div>
+          <div class="char-card-role">【中央エリア代表】</div>
+        </div>
+        <div class="char-card-body">
+          <div class="char-card-text">
+            <div class="char-card-section">
+              <div class="char-card-section-title">◇人柄◇</div>
+              <div class="char-card-section-body">人と人の間に自然と立ち、力の偏りをそっとならす人物です。必要な言葉を選びながら、急がずに関係の形を整えていきます。</div>
+            </div>
+            <div class="char-card-section">
+              <div class="char-card-section-title">◇大切にしていること◇</div>
+              <div class="char-card-section-body">誰かを上にも下にも置かず、この場が本当にまとまるかを静かに見つめます。表面的な馴れ合いより、互いが無理なく立てる距離を大切にします。</div>
+            </div>
+            <div class="char-card-section">
+              <div class="char-card-section-title">◇考え方の軸◇</div>
+              <div class="char-card-section-body">すぐに答えを出すより、散らばった声がどこで重なるかを見つめます。誰か一人の意見に寄りかからず、全体の形を静かに探します。</div>
+            </div>
+            <div class="char-card-section">
+              <div class="char-card-section-title">◇少し不器用なところ◇</div>
+              <div class="char-card-section-body">場を整えようとするほど、自分の思いを後ろへ下げやすいところがあります。それでも、必要な時には静かに中心へ立とうとします。</div>
+            </div>
+            <div class="char-card-section">
+              <div class="char-card-section-title">◇村での役割◇</div>
+              <div class="char-card-section-body">すべてのエリアをつなぎ、村の中心を整えます。村長と四方の声を受け止め、判断が自然に集まる場を支えます。</div>
+            </div>
+          </div>
+          <div class="char-card-image-wrap">
+            <img src="common/roan_high.png" alt="ロアン" class="char-card-image" />
+          </div>
+        </div>
+        <div class="char-card-quote">
+          <div class="char-card-quote-inner">「私は、あなたの心が静かに<br>整う場所でありたいのです」</div>
+        </div>
+        <button class="char-card-close" id="charCardClose">✕ 閉じる</button>
+      </div>
     </div>
   </div>
 
@@ -1498,14 +1688,7 @@ body {
     <div class="feedback-box">
       <div class="feedback-title">ご意見・ご感想</div>
       <div class="feedback-subtitle">開発中のため、お気づきの点をお聞かせください</div>
-      <div id="feedbackChoose">
-        <div class="feedback-buttons" style="flex-direction:column; gap:10px; margin-top:16px;">
-          <button class="feedback-btn feedback-btn-send" id="feedbackChooseForm">📝 フォームで送る</button>
-          <button class="feedback-btn feedback-btn-send" id="feedbackChooseLine" style="background:linear-gradient(180deg,#06c755,#04a044);">💬 LINEで連絡する</button>
-          <button class="feedback-btn feedback-btn-cancel" id="feedbackChooseCancel">キャンセル</button>
-        </div>
-      </div>
-      <div id="feedbackInner" style="display:none;">
+      <div id="feedbackInner">
         <textarea id="feedbackText" class="feedback-textarea" placeholder="感想・気になった点・改善要望など、なんでもどうぞ"></textarea>
         <div class="feedback-buttons">
           <button class="feedback-btn feedback-btn-cancel" id="feedbackCancel">キャンセル</button>
@@ -2702,6 +2885,25 @@ function hideCharSelect() {
   });
 }
 
+// ── キャラクターカード ──
+function showCharCard() {
+  $("charSelect").classList.remove("visible");
+  $("charCard").classList.add("show");
+  $("btnHomeFixed").classList.add("visible");
+}
+function hideCharCard() {
+  $("charCard").classList.remove("show");
+}
+$("btnCentralChar").addEventListener("click", (e) => {
+  e.stopPropagation();
+  showCharCard();
+});
+$("charCardClose").addEventListener("click", (e) => {
+  e.stopPropagation();
+  hideCharCard();
+  showCharSelect();
+});
+
 function renderScene() {
   const s = currentSceneSet[sceneIndex];
 
@@ -3220,28 +3422,15 @@ function hideDevBanner() {
 
 $('devBanner').addEventListener('click', (e) => {
   e.stopPropagation();
-  $('feedbackChoose').style.display = 'block';
-  $('feedbackInner').style.display = 'none';
-  $('feedbackModal').classList.add('show');
-});
-
-$('feedbackChooseCancel').addEventListener('click', (e) => {
-  e.stopPropagation();
-  $('feedbackModal').classList.remove('show');
-});
-
-$('feedbackChooseLine').addEventListener('click', (e) => {
-  e.stopPropagation();
-  window.open('https://line.me/R/ti/p/@340iufcc', '_blank');
-  $('feedbackModal').classList.remove('show');
-});
-
-$('feedbackChooseForm').addEventListener('click', (e) => {
-  e.stopPropagation();
-  $('feedbackChoose').style.display = 'none';
   $('feedbackText').value = '';
-  $('feedbackInner').style.display = 'block';
+  $('feedbackInner').innerHTML = `
+    <textarea id="feedbackText" class="feedback-textarea" placeholder="感想・気になった点・改善要望など、なんでもどうぞ"></textarea>
+    <div class="feedback-buttons">
+      <button class="feedback-btn feedback-btn-cancel" id="feedbackCancel">キャンセル</button>
+      <button class="feedback-btn feedback-btn-send" id="feedbackSend">送信する</button>
+    </div>`;
   attachFeedbackEvents();
+  $('feedbackModal').classList.add('show');
 });
 
 function attachFeedbackEvents() {
