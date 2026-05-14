@@ -2200,8 +2200,8 @@ function buildRadarChart() {
     rl.setAttribute('x', lx); rl.setAttribute('y', ly);
     rl.textContent = paramData[i].area;
   });
-  // データ
-  updateRadarData();
+  // データ（アニメーション付き）
+  animateRadarData();
   // メーターバー
   buildMeters();
 }
@@ -2209,6 +2209,35 @@ function buildRadarChart() {
 function updateRadarData() {
   const pts = paramData.map((p, i) => radarPoint(i, p.value / 100).join(',')).join(' ');
   document.getElementById('radarData').setAttribute('points', pts);
+}
+
+let _radarRafId = null;
+function animateRadarData() {
+  if (_radarRafId !== null) {
+    cancelAnimationFrame(_radarRafId);
+    _radarRafId = null;
+  }
+  const el = document.getElementById('radarData');
+  // 初期：全頂点を中心へ
+  el.setAttribute('points', `${radarCX},${radarCY} `.repeat(5).trim());
+
+  const duration = 900; // ms
+  const startTime = performance.now();
+
+  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+  function step(now) {
+    const raw = Math.min((now - startTime) / duration, 1);
+    const progress = easeOutCubic(raw);
+    const pts = paramData.map((p, i) => radarPoint(i, p.value / 100 * progress).join(',')).join(' ');
+    el.setAttribute('points', pts);
+    if (raw < 1) {
+      _radarRafId = requestAnimationFrame(step);
+    } else {
+      _radarRafId = null;
+    }
+  }
+  _radarRafId = requestAnimationFrame(step);
 }
 
 function buildMeters() {
