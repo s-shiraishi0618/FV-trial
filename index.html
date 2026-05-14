@@ -163,12 +163,37 @@
   transform: translateY(0);
   pointer-events: auto;
 }
-.param-body {
+.param-mode-btns {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  padding-top: 24px;
+  gap: 7px;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+.param-mode-btn {
+  padding: 5px 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(128,76,84,0.45);
+  background: transparent;
+  color: rgba(45,30,30,0.65);
+  font-size: 11px;
+  font-family: "Hiragino Mincho ProN","Yu Mincho",serif;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.param-mode-btn.active {
+  background: rgba(128,76,84,0.14);
+  color: rgba(45,30,30,0.9);
+  border-color: rgba(128,76,84,0.65);
+}
+.param-mode-label {
+  font-size: 10px;
+  color: rgba(151,109,54,0.8);
+  font-family: "Hiragino Mincho ProN","Yu Mincho",serif;
+  letter-spacing: 0.08em;
+  text-align: center;
+  min-height: 14px;
+  margin-bottom: 2px;
 }
 /* レーダーチャート */
 .radar-svg {
@@ -183,7 +208,13 @@
   stroke-width: 1;
   stroke-dasharray: 3 4;
 }
-.radar-qlabel {
+.param-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding-top: 16px;
+}
   font-size: 7px;
   fill: rgba(45,30,30,0.52);
   font-family: "Hiragino Mincho ProN","Yu Mincho",serif;
@@ -1631,6 +1662,13 @@ body {
       <span class="panel-title">村のパラメータ</span>
     </div>
     <div class="param-body">
+      <!-- モード切替ボタン -->
+      <div class="param-mode-btns">
+        <button class="param-mode-btn active" data-mode="base" onclick="setParamMode('base')">宿命</button>
+        <button class="param-mode-btn" data-mode="month" onclick="setParamMode('month')">今月の気</button>
+        <button class="param-mode-btn" data-mode="day" onclick="setParamMode('day')">今日の気</button>
+      </div>
+      <div class="param-mode-label" id="paramModeLabel"></div>
       <!-- レーダーチャート -->
       <svg class="radar-svg" viewBox="0 0 160 160" overflow="visible">
         <!-- グリッド -->
@@ -1644,8 +1682,10 @@ body {
         <line class="radar-axis" id="ax2" x1="80" y1="80" x2="0" y2="0"/>
         <line class="radar-axis" id="ax3" x1="80" y1="80" x2="0" y2="0"/>
         <line class="radar-axis" id="ax4" x1="80" y1="80" x2="0" y2="0"/>
-        <!-- データ -->
+        <!-- データ（宿命ベース） -->
         <polygon class="radar-data" id="radarData" fill="rgb(128,76,84)" fill-opacity="0.12" stroke="rgb(151,109,54)" stroke-opacity="0.75" stroke-width="1.8" points=""/>
+        <!-- データ（今月・今日のオーバーレイ） -->
+        <polygon id="radarDataOverlay" fill="rgb(184,142,68)" fill-opacity="0" stroke="rgb(184,142,68)" stroke-opacity="0" stroke-width="1.4" stroke-dasharray="4 3" points=""/>
         <!-- ラベル（方位） -->
         <text class="radar-label" id="rl0"></text>
         <text class="radar-label" id="rl1"></text>
@@ -1873,7 +1913,7 @@ body {
       <button class="home-btn" id="btnVillage">村長の家へ</button>
       <button class="home-btn disabled">準備中</button>
     </div>
-    <div class="home-version">α ver. 0.2.32</div>
+    <div class="home-version">α ver. 0.2.33</div>
   </div>
 
   <!-- FVについて テキストページオーバーレイ -->
@@ -2038,7 +2078,8 @@ const clientBase = `${appBase}clients/${clientId}/`;
 const CLIENT = {
   char: { name: "ロアン", central: "char_central.png" },
   params: { north: 75, east: 60, south: 85, west: 50, central: 70 },
-  stars: ["貫索星", "禄存星", "車騎星", "玉堂星", "貫索星"], // data.jsonで上書き
+  stars: ["貫索星", "禄存星", "車騎星", "玉堂星", "貫索星"],
+  meishiki: null,
   guidePersonal: null
 };
 
@@ -2047,6 +2088,7 @@ fetch(`${clientBase}data.json`)
   .then(data => {
     Object.assign(CLIENT.char, data.char);
     Object.assign(CLIENT.params, data.params);
+    if (data.meishiki) CLIENT.meishiki = data.meishiki;
     if (data.stars) CLIENT.stars = data.stars;
     if (data.guidePersonal) CLIENT.guidePersonal = data.guidePersonal;
 
@@ -2184,6 +2226,148 @@ function closeFortunePanel() {
   if (currentScreen === 'intro' && sceneIndex === 0) {
     $("btnFortune").classList.add("visible");
   }
+}
+
+// ── 干支算出 & 月日の気 ──────────────────────────────────────
+const KAN  = ["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"];
+const SHI  = ["子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥"];
+const D02  = {
+  甲:{子:7,丑:10,寅:11,卯:12,辰:8,巳:4,午:2,未:5,申:1,酉:3,戌:6,亥:9},
+  乙:{子:4,丑:8,寅:12,卯:11,辰:10,巳:7,午:9,未:6,申:3,酉:1,戌:5,亥:2},
+  丙:{子:3,丑:6,寅:9,卯:7,辰:10,巳:11,午:12,未:8,申:4,酉:2,戌:5,亥:1},
+  丁:{子:1,丑:5,寅:2,卯:4,辰:8,巳:12,午:11,未:10,申:7,酉:9,戌:6,亥:3},
+  戊:{子:3,丑:6,寅:9,卯:7,辰:10,巳:11,午:12,未:8,申:4,酉:2,戌:5,亥:1},
+  己:{子:1,丑:5,寅:2,卯:4,辰:8,巳:12,午:11,未:10,申:7,酉:9,戌:6,亥:3},
+  庚:{子:2,丑:5,寅:1,卯:3,辰:6,巳:9,午:7,未:10,申:11,酉:12,戌:8,亥:4},
+  辛:{子:9,丑:6,寅:3,卯:1,辰:5,巳:2,午:4,未:8,申:12,酉:11,戌:10,亥:7},
+  壬:{子:12,丑:8,寅:4,卯:2,辰:5,巳:1,午:3,未:6,申:9,酉:7,戌:10,亥:11},
+  癸:{子:11,丑:10,寅:7,卯:9,辰:6,巳:3,午:1,未:5,申:2,酉:4,戌:8,亥:12}
+};
+const D03_ZK = {
+  子:["癸"],丑:["癸","辛","己"],寅:["戊","丙","甲"],
+  卯:["乙"],辰:["乙","癸","戊"],巳:["戊","庚","丙"],
+  午:["己","丁"],未:["丁","乙","己"],申:["戊","壬","庚"],
+  酉:["辛"],戌:["辛","丁","戊"],亥:["甲","壬"]
+};
+const GOGYOU_MAP = {
+  north:["壬","癸"], east:["甲","乙"], south:["丙","丁"],
+  west:["庚","辛"], central:["戊","己"]
+};
+// 節気[月,日]（立春〜大雪）
+const SETSU = {
+  2025:[[2,4],[3,6],[4,5],[5,6],[6,6],[7,7],[8,7],[9,8],[10,8],[11,7],[12,7]],
+  2026:[[2,4],[3,6],[4,5],[5,6],[6,6],[7,7],[8,7],[9,8],[10,8],[11,7],[12,7]],
+  2027:[[2,4],[3,6],[4,5],[5,6],[6,6],[7,7],[8,7],[9,8],[10,8],[11,7],[12,7]]
+};
+// 翌年小寒（正月の前節気）[year+1, 月, 日]
+const SHOKAN = { 2025:[2026,1,6], 2026:[2027,1,5], 2027:[2028,1,6] };
+
+function getDayKanshi(d) {
+  const ref = Date.UTC(1900,0,1);
+  const cur = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
+  const idx = (((10 + Math.round((cur-ref)/86400000)) % 60) + 60) % 60;
+  return { kan: KAN[idx%10], shi: SHI[idx%12] };
+}
+
+function getMonthKanshi(d) {
+  const y = d.getFullYear(), m = d.getMonth()+1, day = d.getDate();
+  // 節気年（立春前は前年扱い）
+  const sy = (m===1||(m===2&&day<4)) ? y-1 : y;
+  const nodes = SETSU[sy] || SETSU[2026];
+  const sk = SHOKAN[sy] || [sy+1,1,6];
+  // 月番号（0=寅月/正月〜11=丑月/12月）
+  let mn = 0;
+  const cur = Date.UTC(y, m-1, day);
+  nodes.forEach(([nm,nd],i) => {
+    if (cur >= Date.UTC(sy,nm-1,nd)) mn = i;
+  });
+  // 小寒に達していたら12月（丑月）
+  if (cur >= Date.UTC(sk[0],sk[1]-1,sk[2])) mn = 11;
+  // 月支：寅(2)から始まる
+  const shiIdx = (mn+2) % 12;
+  // 月干：年干グループで決まる
+  const yStemIdx = (sy-4+200) % 10;
+  const startKan = [2,4,6,8,0][yStemIdx%5];
+  const kanIdx = (startKan+mn) % 10;
+  return { kan: KAN[kanIdx], shi: SHI[shiIdx] };
+}
+
+function calcGogyouWithExtra(meishiki, extraKan, extraShi) {
+  const pillars = meishiki.split("・");
+  const tenkan = pillars.map(p=>p[0]);
+  const chishi = pillars.map(p=>p[1]);
+  if (extraKan) tenkan.push(extraKan);
+  if (extraShi) chishi.push(extraShi);
+  // 出現数
+  const cnt = {};
+  tenkan.forEach(k => cnt[k]=(cnt[k]||0)+1);
+  chishi.forEach(s => (D03_ZK[s]||[]).forEach(k => cnt[k]=(cnt[k]||0)+1));
+  // 五行スコア
+  const scores = {};
+  Object.entries(GOGYOU_MAP).forEach(([area, kans]) => {
+    scores[area] = kans.reduce((sum,k) => {
+      const m = cnt[k]||0;
+      if (!m) return sum;
+      return sum + chishi.reduce((s,b) => s+(D02[k]?.[b]||0), 0)*m;
+    }, 0);
+  });
+  return scores;
+}
+
+// モード管理
+let currentParamMode = 'base';
+let _overlayRafId = null;
+
+function setParamMode(mode) {
+  currentParamMode = mode;
+  document.querySelectorAll('.param-mode-btn').forEach(btn =>
+    btn.classList.toggle('active', btn.dataset.mode === mode)
+  );
+  const lbl = document.getElementById('paramModeLabel');
+  if (mode === 'base') {
+    lbl.textContent = '';
+    animateRadarOverlay(null);
+    return;
+  }
+  const today = new Date();
+  const { kan, shi } = mode === 'day' ? getDayKanshi(today) : getMonthKanshi(today);
+  const meishiki = CLIENT.meishiki;
+  if (!meishiki) { lbl.textContent = '（命式データなし）'; return; }
+  const scores = calcGogyouWithExtra(meishiki, kan, shi);
+  const label = mode === 'day'
+    ? `今日（${kan}${shi}）の気を加算`
+    : `今月（${kan}${shi}）の気を加算`;
+  lbl.textContent = label;
+  // paramData の順序でオーバーレイ値を作成
+  const overlay = paramData.map(p => scores[p.key] ?? 0);
+  animateRadarOverlay(overlay);
+}
+
+function animateRadarOverlay(targetValues) {
+  if (_overlayRafId !== null) { cancelAnimationFrame(_overlayRafId); _overlayRafId = null; }
+  const el = document.getElementById('radarDataOverlay');
+  if (!targetValues) {
+    el.setAttribute('fill-opacity','0');
+    el.setAttribute('stroke-opacity','0');
+    return;
+  }
+  el.setAttribute('fill','rgb(184,142,68)');
+  el.setAttribute('fill-opacity','0.18');
+  el.setAttribute('stroke','rgb(184,142,68)');
+  el.setAttribute('stroke-opacity','0.72');
+  el.setAttribute('points', `${radarCX},${radarCY} `.repeat(5).trim());
+  const duration = 1400;
+  const start = performance.now();
+  function easeOut(t){ return 1-Math.pow(1-t,3); }
+  function step(now) {
+    const raw = Math.min((now-start)/duration, 1);
+    const p = easeOut(raw);
+    const pts = targetValues.map((v,i) => radarPoint(i, v/100*p).join(',')).join(' ');
+    el.setAttribute('points', pts);
+    if (raw < 1) _overlayRafId = requestAnimationFrame(step);
+    else _overlayRafId = null;
+  }
+  _overlayRafId = requestAnimationFrame(step);
 }
 
 // ── 村のパラメータ ──
