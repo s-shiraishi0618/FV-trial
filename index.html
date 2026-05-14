@@ -186,8 +186,10 @@
 }
 .radar-axis { stroke: rgba(128,76,84,0.26); stroke-width: 1; }
 .radar-data {
-  fill: rgba(128,76,84,0.12);
-  stroke: rgba(151,109,54,0.75);
+  fill: rgb(128,76,84);
+  fill-opacity: 0.12;
+  stroke: rgb(151,109,54);
+  stroke-opacity: 0.75;
   stroke-width: 1.8;
 }
 .radar-label {
@@ -1637,7 +1639,7 @@ body {
         <line class="radar-axis" id="ax3" x1="80" y1="80" x2="0" y2="0"/>
         <line class="radar-axis" id="ax4" x1="80" y1="80" x2="0" y2="0"/>
         <!-- データ -->
-        <polygon class="radar-data" id="radarData" fill="rgba(128,76,84,0.12)" stroke="rgba(151,109,54,0.75)" stroke-width="1.8" points=""/>
+        <polygon class="radar-data" id="radarData" fill="rgb(128,76,84)" fill-opacity="0.12" stroke="rgb(151,109,54)" stroke-opacity="0.75" stroke-width="1.8" points=""/>
         <!-- ラベル（方位） -->
         <text class="radar-label" id="rl0"></text>
         <text class="radar-label" id="rl1"></text>
@@ -1871,7 +1873,7 @@ body {
       <button class="home-btn" id="btnVillage">村長の家へ</button>
       <button class="home-btn disabled">準備中</button>
     </div>
-    <div class="home-version">α ver. 0.2.29</div>
+    <div class="home-version">α ver. 0.2.30</div>
   </div>
 
   <!-- FVについて テキストページオーバーレイ -->
@@ -2255,9 +2257,11 @@ function animateRadarData() {
     _radarRafId = null;
   }
   const el = document.getElementById('radarData');
-  // iOS Safari対策：インラインで明示的に色を設定
-  el.setAttribute('fill', 'rgba(128,76,84,0.12)');
-  el.setAttribute('stroke', 'rgba(151,109,54,0.75)');
+  // iOS Safari対策：SVG正規記法でインライン指定（rgba不可→fill-opacity分離）
+  el.setAttribute('fill', 'rgb(128,76,84)');
+  el.setAttribute('fill-opacity', '0.12');
+  el.setAttribute('stroke', 'rgb(151,109,54)');
+  el.setAttribute('stroke-opacity', '0.75');
   el.setAttribute('stroke-width', '1.8');
   // 初期：全頂点を中心へ
   el.setAttribute('points', `${radarCX},${radarCY} `.repeat(5).trim());
