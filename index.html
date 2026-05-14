@@ -1855,7 +1855,7 @@ body {
       <button class="home-btn" id="btnVillage">村長の家へ</button>
       <button class="home-btn disabled">準備中</button>
     </div>
-    <div class="home-version">α ver. 0.2.21</div>
+    <div class="home-version">α ver. 0.2.22</div>
   </div>
 
   <!-- FVについて テキストページオーバーレイ -->
@@ -2005,6 +2005,9 @@ const $ = (id) => document.getElementById(id);
 
 // ── クライアント読み込み ──
 const urlParams = new URLSearchParams(window.location.search);
+
+// ── テスト用ツール表示フラグ（falseで非表示） ──
+const SHOW_TEST_TOOLS = false;
 const clientId = urlParams.get('c') || 'sample';
 
 const appBase =
@@ -2537,8 +2540,8 @@ function updateSpherePanel() {
     item.appendChild(info);
     list.appendChild(item);
 
-    // デバッグボタン（未入手のもののみ）
-    if (!slot.collected) {
+    // デバッグボタン（未入手のもののみ・テスト用フラグで制御）
+    if (SHOW_TEST_TOOLS && !slot.collected) {
       const btn = document.createElement("button");
       btn.className = "sphere-debug-btn";
       btn.textContent = sphere.name.replace("・スフィア", "");
@@ -2547,9 +2550,11 @@ function updateSpherePanel() {
     }
   });
 
-  // すべて入手済みならデバッグ枠を非表示
-  if (slots.every(s => s.collected)) {
+  // テスト用ツールが無効、またはすべて入手済みならデバッグ枠を非表示
+  if (!SHOW_TEST_TOOLS || slots.every(s => s.collected)) {
     $("sphereDebug").style.display = "none";
+  } else {
+    $("sphereDebug").style.display = "";
   }
 }
 
@@ -2723,22 +2728,24 @@ function renderShizukuSection(areaKey) {
   });
   content.appendChild(grid);
 
-  // テスト用ボタン（スフィアFV名のみ）
-  const debug = document.createElement("div");
-  debug.className = "shard-debug";
-  debug.innerHTML = `<div class="shard-debug-title">🔧 テスト用 — しずく取得</div><div class="shard-debug-btns" id="shizukuDebugBtns_${areaKey}"></div>`;
-  content.appendChild(debug);
-  const btnsEl = debug.querySelector(`#shizukuDebugBtns_${areaKey}`);
-  ALL_STARS.forEach(star => {
-    if (shards[star]) return;
-    const btn = document.createElement("button");
-    btn.className = "shard-debug-btn";
-    const sp = STAR_TO_SPHERE[star];
-    btn.textContent = sp ? sp.name.replace("・スフィア","") : "しずく";
-    btn.addEventListener("click", (e) => { e.stopPropagation(); collectShizuku(areaKey, star); });
-    btnsEl.appendChild(btn);
-  });
-  if (ALL_STARS.every(s => shards[s])) debug.style.display = "none";
+  // テスト用ボタン（スフィアFV名のみ・テスト用フラグで制御）
+  if (SHOW_TEST_TOOLS) {
+    const debug = document.createElement("div");
+    debug.className = "shard-debug";
+    debug.innerHTML = `<div class="shard-debug-title">🔧 テスト用 — しずく取得</div><div class="shard-debug-btns" id="shizukuDebugBtns_${areaKey}"></div>`;
+    content.appendChild(debug);
+    const btnsEl = debug.querySelector(`#shizukuDebugBtns_${areaKey}`);
+    ALL_STARS.forEach(star => {
+      if (shards[star]) return;
+      const btn = document.createElement("button");
+      btn.className = "shard-debug-btn";
+      const sp = STAR_TO_SPHERE[star];
+      btn.textContent = sp ? sp.name.replace("・スフィア","") : "しずく";
+      btn.addEventListener("click", (e) => { e.stopPropagation(); collectShizuku(areaKey, star); });
+      btnsEl.appendChild(btn);
+    });
+    if (ALL_STARS.every(s => shards[s])) debug.style.display = "none";
+  }
 }
 
 // ── 背景パンアニメーション（requestAnimationFrame） ──
