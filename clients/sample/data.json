@@ -21,5 +21,38 @@
     "牽牛星",
     "石門星",
     "禄存星"
-  ]
+  ],
+
+  "achievements": {
+    "north": [
+      {
+        "id": "n_area",
+        "label": "北エリアへ訪ねる",
+        "type": "A",
+        "trigger": { "scene": "north_area" }
+      },
+      {
+        "id": "n_library",
+        "label": "北の図書館へ",
+        "type": "B",
+        "trigger": { "choice": "north_library_enter" }
+      },
+      {
+        "id": "n_market",
+        "label": "北の交易所へ",
+        "type": "B",
+        "trigger": { "choice": "north_market_enter" }
+      },
+      {
+        "id": "n_char",
+        "label": "北エリア代表と会う",
+        "type": "B",
+        "trigger": { "choice": "north_char_meet" }
+      }
+    ],
+    "south":   [],
+    "east":    [],
+    "west":    [],
+    "central": []
+  }
 }
