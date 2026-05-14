@@ -1,5 +1,6 @@
 {
-  "clientName": "サンプル",
+  "clientName": "TEST",
+  "meishiki": "戊午・乙卯・甲戌",
   "char": {
     "name": "ロアン",
     "central": "char_central.png",
@@ -8,10 +9,17 @@
     "bustY": 30
   },
   "params": {
-    "north": 75,
-    "east": 60,
-    "south": 85,
-    "west": 50,
-    "central": 70
-  }
+    "north": 0,
+    "east": 70,
+    "south": 42,
+    "west": 15,
+    "central": 69
+  },
+  "stars": [
+    "石門星",
+    "司禄星",
+    "牽牛星",
+    "石門星",
+    "禄存星"
+  ]
 }
