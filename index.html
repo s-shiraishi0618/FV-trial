@@ -1652,12 +1652,6 @@ body {
         <text class="radar-label" id="rl2"></text>
         <text class="radar-label" id="rl3"></text>
         <text class="radar-label" id="rl4"></text>
-        <!-- ラベル（五行の質） -->
-        <text class="radar-qlabel" id="ql0"></text>
-        <text class="radar-qlabel" id="ql1"></text>
-        <text class="radar-qlabel" id="ql2"></text>
-        <text class="radar-qlabel" id="ql3"></text>
-        <text class="radar-qlabel" id="ql4"></text>
       </svg>
       <!-- メーターバー -->
       <div class="meter-list" id="meterList"></div>
@@ -1879,7 +1873,7 @@ body {
       <button class="home-btn" id="btnVillage">村長の家へ</button>
       <button class="home-btn disabled">準備中</button>
     </div>
-    <div class="home-version">α ver. 0.2.31</div>
+    <div class="home-version">α ver. 0.2.32</div>
   </div>
 
   <!-- FVについて テキストページオーバーレイ -->
@@ -2217,33 +2211,15 @@ function buildRadarChart() {
   // 100%境界ライン（破線）
   const pts100 = radarAngles.map((_, i) => radarPoint(i, 1).join(',')).join(' ');
   document.getElementById('rg100').setAttribute('points', pts100);
-  // 軸（1.5倍まで伸ばして突き出しに対応）& ラベル
+  // 軸（1.0まで）& 方位ラベル
   radarAngles.forEach((_, i) => {
-    const [x2, y2] = radarPoint(i, 1.5);
+    const [x2, y2] = radarPoint(i, 1);
     const ax = document.getElementById(`ax${i}`);
     ax.setAttribute('x2', x2); ax.setAttribute('y2', y2);
-    // 方位ラベル
-    const [lx, ly] = radarPoint(i, 1.62);
+    const [lx, ly] = radarPoint(i, 1.22);
     const rl = document.getElementById(`rl${i}`);
     rl.setAttribute('x', lx); rl.setAttribute('y', ly);
     rl.textContent = paramData[i].area;
-    // 五行の質ラベル（2行に分割）
-    const [qlx, qly] = radarPoint(i, 1.92);
-    const ql = document.getElementById(`ql${i}`);
-    ql.setAttribute('x', qlx); ql.setAttribute('y', qly);
-    ql.innerHTML = '';
-    const parts = paramData[i].label.split('・');
-    if (parts.length === 2) {
-      const t1 = document.createElementNS('http://www.w3.org/2000/svg','tspan');
-      t1.setAttribute('x', qlx); t1.setAttribute('dy', '-4');
-      t1.textContent = parts[0];
-      const t2 = document.createElementNS('http://www.w3.org/2000/svg','tspan');
-      t2.setAttribute('x', qlx); t2.setAttribute('dy', '9');
-      t2.textContent = parts[1];
-      ql.appendChild(t1); ql.appendChild(t2);
-    } else {
-      ql.textContent = paramData[i].label;
-    }
   });
   // データ（アニメーション付き）
   animateRadarData();
