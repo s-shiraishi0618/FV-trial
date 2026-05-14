@@ -1855,7 +1855,7 @@ body {
       <button class="home-btn" id="btnVillage">村長の家へ</button>
       <button class="home-btn disabled">準備中</button>
     </div>
-    <div class="home-version">α ver. 0.2.20</div>
+    <div class="home-version">α ver. 0.2.21</div>
   </div>
 
   <!-- FVについて テキストページオーバーレイ -->
@@ -3527,7 +3527,12 @@ function hideAboutTextPage() {
 
 $("aboutTextCloseBtn").addEventListener("click", (e) => {
   e.stopPropagation();
-  hideAboutTextPage();
+
+  if (navStack.length > 0) {
+    goBack();
+  } else {
+    hideAboutTextPage();
+  }
 });
 $("aboutTextOverlay").addEventListener("click", (e) => e.stopPropagation());
 const FORM_ACTION = 'https://docs.google.com/forms/u/0/d/e/1FAIpQLSfHQdpIdKQriBg52ZESwP0Q8ZdazM-nOH8e--dIXwS-C6ofIQ/formResponse';
@@ -3642,8 +3647,17 @@ function next() {
 $("btnAbout").addEventListener("click", (e) => {
   e.stopPropagation();
   if (videoPlaying) return;
+
   unlockVideos(); // iOS Safari のため事前解除
-  // サブメニューパネルを表示
+
+  pushBack(() => {
+    $("aboutPanel").classList.remove("visible");
+    document.getElementById('app').classList.remove('panel-open');
+    currentScreen = "home";
+    $("home").classList.add("visible");
+    $("btnHomeFixed").classList.remove("visible");
+  });
+
   document.getElementById('app').classList.add('panel-open');
   hideChoices();
   $("aboutPanel").classList.add("visible");
@@ -3668,10 +3682,21 @@ $("btnAboutVideo").addEventListener("click", (e) => {
 
 ["btnAboutIntro", "btnAboutWhat", "btnAboutIndustry", "btnAboutChars"].forEach((id, i) => {
   const keys = ["intro", "what", "industry", "chars"];
-  $( id).addEventListener("click", (e) => {
+
+  $(id).addEventListener("click", (e) => {
     e.stopPropagation();
+
     $("aboutPanel").classList.remove("visible");
+
+    pushBack(() => {
+      hideAboutTextPage();
+      document.getElementById('app').classList.add('panel-open');
+      $("aboutPanel").classList.add("visible");
+      $("btnHomeFixed").classList.add("visible");
+    });
+
     showAboutTextPage(keys[i]);
+    $("btnHomeFixed").classList.add("visible");
   });
 });
 
