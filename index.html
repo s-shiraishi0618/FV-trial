@@ -838,7 +838,7 @@ body {
 .home-update-info {
   width: 100%;
   max-width: 320px;
-  margin-top: -6px;
+  margin-top: 2px;
   padding: 9px 14px 10px;
   border-radius: 14px;
   border: 1px solid rgba(216,185,120,0.28);
@@ -1964,13 +1964,12 @@ body {
       <button class="home-btn" id="btnContinue" style="display:none; border-color: rgba(216,185,120,0.9); background: linear-gradient(180deg, rgba(62,38,14,0.96), rgba(38,22,6,0.98));">続きから ▶</button>
       <button class="home-btn" id="btnAbout">フォーチュン・ヴィレッジについて</button>
       <button class="home-btn" id="btnVillage">村長の家へ</button>
-      <button class="home-btn disabled">準備中</button>
+      <div id="homeUpdateInfo" class="home-update-info">
+        <div class="home-update-label">更新情報</div>
+        <div class="home-update-text">α ver.0.2.39｜村のスフィアエネルギーに、今月と今日の巡りが重なるようになりました</div>
+      </div>
     </div>
-    <div id="homeUpdateInfo" class="home-update-info">
-      <div class="home-update-label">更新情報</div>
-      <div class="home-update-text">α ver.0.2.38｜村のスフィアエネルギーに、今月と今日の巡りが重なるようになりました</div>
-    </div>
-    <div class="home-version">α ver. 0.2.39</div>
+    <div class="home-version">α ver. 0.2.40</div>
   </div>
 
   <!-- FVについて テキストページオーバーレイ -->
@@ -2431,9 +2430,9 @@ function setParamMode(mode) {
   }
   const scores = calcGogyouWithExtra(meishiki, kan, shi);
   if (mode === 'day') {
-    setParamCaption(`今日のスフィアエネルギー：${kan}${shi}`, '村のエネルギーに、今日のスフィアエネルギーを加えて表示します。');
+    setParamCaption(`今日のスフィアエネルギー`, '村のエネルギーに、今日のスフィアエネルギーを加えて表示します。');
   } else {
-    setParamCaption(`今月のスフィアエネルギー：${kan}${shi}`, '村のエネルギーに、今月のスフィアエネルギーを加えて表示します。');
+    setParamCaption(`今月のスフィアエネルギー`, '村のエネルギーに、今月のスフィアエネルギーを加えて表示します。');
   }
   const overlay = paramData.map(p => scores[p.key] ?? 0);
   animateRadarOverlay(overlay);
