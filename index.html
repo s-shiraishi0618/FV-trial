@@ -220,7 +220,8 @@
   overflow: visible;
 }
 .radar-overlay {
-  filter: drop-shadow(0 0 4px rgba(184,142,68,0.38));
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 5px rgba(184,142,68,0.38));
 }
 .radar-grid { fill: none; stroke: rgba(128,76,84,0.22); stroke-width: 1; }
 .radar-grid-100 {
@@ -1709,7 +1710,7 @@ body {
         <!-- データ（宿命ベース） -->
         <polygon class="radar-data" id="radarData" fill="rgb(128,76,84)" fill-opacity="0.12" stroke="rgb(151,109,54)" stroke-opacity="0.75" stroke-width="1.8" points=""/>
         <!-- データ（今月・本日のオーバーレイ） -->
-        <polygon id="radarDataOverlay" class="radar-overlay" fill="rgb(184,142,68)" fill-opacity="0" stroke="rgb(184,142,68)" stroke-opacity="0" stroke-width="1.6" stroke-dasharray="5 4" points=""/>
+        <polygon id="radarDataOverlay" class="radar-overlay" fill="rgb(184,142,68)" fill-opacity="0" stroke="rgb(184,142,68)" stroke-opacity="0" stroke-width="1.8" points=""/>
         <!-- ラベル（方位） -->
         <text class="radar-label" id="rl0"></text>
         <text class="radar-label" id="rl1"></text>
@@ -1937,7 +1938,7 @@ body {
       <button class="home-btn" id="btnVillage">村長の家へ</button>
       <button class="home-btn disabled">準備中</button>
     </div>
-    <div class="home-version">α ver. 0.2.35</div>
+    <div class="home-version">α ver. 0.2.36</div>
   </div>
 
   <!-- FVについて テキストページオーバーレイ -->
@@ -2384,11 +2385,11 @@ function animateRadarOverlay(targetValues) {
     return;
   }
   el.setAttribute('fill','rgb(184,142,68)');
-  el.setAttribute('fill-opacity','0.08');
+  el.setAttribute('fill-opacity','0.10');
   el.setAttribute('stroke','rgb(184,142,68)');
-  el.setAttribute('stroke-opacity','0.78');
-  el.setAttribute('stroke-width','1.6');
-  el.setAttribute('stroke-dasharray','5 4');
+  el.setAttribute('stroke-opacity','0.70');
+  el.setAttribute('stroke-width','1.8');
+  el.removeAttribute('stroke-dasharray');
   el.setAttribute('points', `${radarCX},${radarCY} `.repeat(5).trim());
   const duration = 1400;
   const start = performance.now();
