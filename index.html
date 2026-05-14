@@ -404,61 +404,103 @@
   padding: 48px 24px 80px;
 }
 
-/* タイトル */
+/* ── タイトル章扉 ── */
 .guide-board-deco {
-  width: 60px; height: 1px;
-  background: rgba(128,76,84,0.5);
-  margin: 0 auto 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 auto 12px;
+}
+.guide-board-deco::before,
+.guide-board-deco::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(128,76,84,0.40), transparent);
+  max-width: 60px;
+}
+.guide-board-deco-mark {
+  width: 5px; height: 5px;
+  border: 1px solid rgba(128,76,84,0.48);
+  transform: rotate(45deg);
+  flex-shrink: 0;
 }
 .guide-board-title {
-  font-size: 22px;
-  letter-spacing: 0.22em;
-  color: rgba(60,30,30,0.92);
+  font-size: 24px;
+  letter-spacing: 0.28em;
+  color: rgba(46,22,22,0.92);
   text-align: center;
   font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 .guide-board-subtitle {
-  font-size: 12px;
-  letter-spacing: 0.18em;
-  color: rgba(128,76,84,0.82);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: rgba(128,76,84,0.58);
   text-align: center;
-  font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
+  font-family: "Palatino Linotype",Palatino,"Hiragino Mincho ProN","Yu Mincho",serif;
   margin-bottom: 14px;
 }
 .guide-board-desc {
-  font-size: 12px;
-  line-height: 1.9;
+  font-size: 11.5px;
+  line-height: 2.0;
   letter-spacing: 0.06em;
-  color: rgba(60,30,30,0.72);
+  color: rgba(60,30,30,0.60);
   text-align: center;
-  margin-bottom: 28px;
+  margin-bottom: 0;
 }
 
-/* コンパス */
+/* ── 案内図ラッパー ── */
 .guide-compass-wrap {
   position: relative;
-  margin: 0 auto 28px;
+  margin: 0 auto 0;
+  padding: 14px 10px;
+  background: rgba(248,239,222,0.42);
+  border: 1px solid rgba(128,76,84,0.20);
+  border-radius: 13px;
 }
+.guide-compass-wrap::before,
+.guide-compass-wrap::after {
+  content: "";
+  position: absolute;
+  width: 10px; height: 10px;
+  border-color: rgba(128,76,84,0.35);
+  border-style: solid;
+  pointer-events: none;
+}
+.guide-compass-wrap::before { top:6px; left:6px; border-width:1px 0 0 1px; }
+.guide-compass-wrap::after  { bottom:6px; right:6px; border-width:0 1px 1px 0; }
+.guide-compass-corner-tr,
+.guide-compass-corner-bl {
+  position: absolute;
+  width: 10px; height: 10px;
+  border-color: rgba(128,76,84,0.35);
+  border-style: solid;
+  pointer-events: none;
+}
+.guide-compass-corner-tr { top:6px; right:6px; border-width:1px 1px 0 0; }
+.guide-compass-corner-bl { bottom:6px; left:6px; border-width:0 0 1px 1px; }
+
 .guide-compass-grid {
   display: grid;
-  grid-template-columns: 1fr 1.1fr 1fr;
+  grid-template-columns: 1fr 1.15fr 1fr;
   grid-template-rows: auto auto auto;
-  gap: 6px;
+  gap: 7px;
   align-items: center;
 }
 .guide-area-card {
-  background: rgba(255,248,236,0.82);
-  border: 1px solid rgba(128,76,84,0.42);
+  background: rgba(250,243,230,0.90);
+  border: 1px solid rgba(128,76,84,0.28);
   border-radius: 10px;
-  padding: 10px 6px;
+  padding: 11px 6px 10px;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(92,48,38,0.08);
+  box-shadow: 0 1px 4px rgba(92,48,38,0.06);
 }
 .guide-area-card.center {
-  background: rgba(126,73,80,0.12);
-  border-color: rgba(128,76,84,0.62);
-  border-width: 1.5px;
+  background: linear-gradient(155deg, rgba(196,162,136,0.26), rgba(176,132,112,0.18));
+  border: 1.5px solid rgba(128,76,84,0.50);
+  box-shadow: 0 2px 8px rgba(92,48,38,0.09), inset 0 1px 0 rgba(255,248,236,0.50);
 }
 .guide-area-card.empty {
   background: transparent;
@@ -467,43 +509,67 @@
 }
 .guide-area-dir {
   font-size: 9px;
-  letter-spacing: 0.2em;
-  color: rgba(128,76,84,0.58);
+  letter-spacing: 0.22em;
+  color: rgba(128,76,84,0.42);
   font-family: "Palatino Linotype",Palatino,serif;
-  margin-bottom: 3px;
+  margin-bottom: 4px;
 }
 .guide-area-name {
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.1em;
-  color: rgba(60,30,30,0.9);
+  color: rgba(48,22,22,0.90);
   font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
-  margin-bottom: 4px;
+  margin-bottom: 5px;
 }
 .guide-area-theme {
-  font-size: 11px;
-  line-height: 1.6;
+  font-size: 10.5px;
+  line-height: 1.7;
   letter-spacing: 0.06em;
-  color: rgba(80,42,38,0.78);
+  color: rgba(78,40,36,0.68);
   font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
 }
 
-/* 専用ガイド */
+/* ── 接続線 ── */
+.guide-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 22px;
+  margin: 0 auto;
+}
+.guide-connector-line {
+  width: 1px;
+  flex: 1;
+  background: linear-gradient(180deg, rgba(128,76,84,0.28), rgba(128,76,84,0.10));
+}
+.guide-connector-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: rgba(128,76,84,0.32);
+  flex-shrink: 0;
+}
+
+/* ── 専用ガイド欄 ── */
 .guide-personal-section {
-  background: rgba(255,248,236,0.72);
-  border: 1.5px solid rgba(128,76,84,0.52);
-  border-radius: 14px;
-  padding: 18px 18px 14px;
-  margin-bottom: 18px;
+  background: rgba(250,243,230,0.90);
+  border: 1px solid rgba(128,76,84,0.28);
+  border-radius: 12px;
+  padding: 0 0 14px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(92,48,38,0.06);
 }
 .guide-personal-title {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.2em;
   color: rgba(255,248,236,0.96);
-  background: linear-gradient(90deg, rgba(126,73,80,0.96), rgba(91,52,68,0.96));
-  border-radius: 999px;
-  padding: 6px 16px;
+  background: linear-gradient(90deg,
+    rgba(116,62,70,0.96) 0%,
+    rgba(138,82,86,0.96) 50%,
+    rgba(98,54,64,0.96) 100%);
+  padding: 9px 16px;
   text-align: center;
   margin-bottom: 14px;
   font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
@@ -512,34 +578,34 @@
   display: flex;
   align-items: baseline;
   gap: 8px;
-  padding: 7px 0;
-  border-bottom: 1px solid rgba(128,76,84,0.16);
+  padding: 8px 18px;
+  border-bottom: 1px solid rgba(128,76,84,0.11);
   font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
 }
 .guide-personal-item:last-child { border-bottom: none; }
 .guide-personal-label {
   font-size: 12px;
-  color: rgba(60,30,30,0.82);
+  color: rgba(52,26,26,0.82);
   flex: 1;
   letter-spacing: 0.06em;
 }
 .guide-personal-arrow {
   font-size: 11px;
-  color: rgba(128,76,84,0.62);
+  color: rgba(128,76,84,0.44);
 }
 .guide-personal-area {
   font-size: 12px;
   font-weight: 600;
-  color: rgba(126,73,80,0.92);
+  color: rgba(116,62,70,0.88);
   letter-spacing: 0.08em;
 }
 
-/* 専用ガイド：準備中ぼかし */
+/* ── COMING SOON ── */
 .guide-personal-body {
   position: relative;
 }
 .guide-personal-body.blurred .guide-personal-item {
-  filter: blur(4px);
+  filter: blur(3px);
   user-select: none;
   pointer-events: none;
 }
@@ -550,48 +616,58 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 4px;
   z-index: 2;
 }
 .guide-personal-coming-soon-label {
-  font-size: 11px;
-  letter-spacing: 0.22em;
-  color: rgba(128,76,84,0.62);
-  font-family: "Palatino Linotype", Palatino, "Hiragino Mincho ProN", "Yu Mincho", serif;
+  font-size: 9px;
+  letter-spacing: 0.30em;
+  color: rgba(128,76,84,0.44);
+  font-family: "Palatino Linotype",Palatino,serif;
 }
 .guide-personal-coming-soon-text {
   font-size: 13px;
   letter-spacing: 0.18em;
-  color: rgba(60,30,30,0.78);
+  color: rgba(46,22,22,0.68);
   font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
 }
-
-/* 注釈 */
-.guide-board-note {
-  font-size: 11px;
-  line-height: 1.8;
+.guide-personal-coming-soon-note {
+  font-size: 10px;
+  line-height: 1.7;
   letter-spacing: 0.04em;
-  color: rgba(60,30,30,0.58);
+  color: rgba(80,42,38,0.44);
+  font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
+  text-align: center;
+  margin-top: 5px;
+  padding: 0 18px;
+}
+
+/* ── 注釈 ── */
+.guide-board-note {
+  font-size: 10.5px;
+  line-height: 1.9;
+  letter-spacing: 0.04em;
+  color: rgba(60,30,30,0.48);
   text-align: center;
   margin-bottom: 28px;
-  padding: 0 8px;
+  padding: 0 10px;
   font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
 }
 
-/* 閉じるボタン */
+/* ── 閉じるボタン ── */
 .guide-board-close {
   display: block;
   margin: 0 auto;
-  padding: 12px 36px;
+  padding: 11px 38px;
   border-radius: 999px;
-  border: 1.5px solid rgba(128,76,84,0.72);
-  background: linear-gradient(180deg, rgba(126,73,80,0.92), rgba(91,52,68,0.92));
+  border: 1px solid rgba(128,76,84,0.58);
+  background: linear-gradient(180deg, rgba(128,70,76,0.92), rgba(94,50,60,0.92));
   color: rgba(255,241,218,0.96);
   font-size: 13px;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   font-family: "Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(63,32,35,0.22);
+  box-shadow: 0 3px 11px rgba(63,32,35,0.16);
 }
 .choice.disabled {
   opacity: 0.42;
@@ -2041,16 +2117,17 @@ body {
   <!-- 村の案内板オーバーレイ -->
   <div id="guideBoardOverlay" class="guide-board-overlay">
     <div class="guide-board-inner">
-      <div class="guide-board-deco"></div>
+      <div class="guide-board-deco"><div class="guide-board-deco-mark"></div></div>
       <h1 class="guide-board-title">村の案内板</h1>
       <p class="guide-board-subtitle">― 鑑定書の読み方ガイド ―</p>
-      <div class="guide-board-deco"></div>
-      <p class="guide-board-desc">このページは、村を読むための入口です。<br>各エリアに表れる人生テーマと、<br>専用の注目点を案内します。</p>
+      <div class="guide-board-deco"><div class="guide-board-deco-mark"></div></div>
+      <p class="guide-board-desc">このページは、村を読むための入口です。<br>各エリアに表れる人生テーマと、<br>あなた専用の注目点をご案内します。</p>
 
-      <!-- コンパス -->
+      <!-- 案内図 -->
       <div class="guide-compass-wrap">
+        <div class="guide-compass-corner-tr"></div>
+        <div class="guide-compass-corner-bl"></div>
         <div class="guide-compass-grid">
-          <!-- 行1 -->
           <div class="guide-area-card empty"></div>
           <div class="guide-area-card">
             <div class="guide-area-dir">N · 北</div>
@@ -2058,7 +2135,6 @@ body {
             <div class="guide-area-theme">親・学び・継承</div>
           </div>
           <div class="guide-area-card empty"></div>
-          <!-- 行2 -->
           <div class="guide-area-card">
             <div class="guide-area-dir">W · 西</div>
             <div class="guide-area-name">西エリア</div>
@@ -2073,7 +2149,6 @@ body {
             <div class="guide-area-name">東エリア</div>
             <div class="guide-area-theme">仕事・幸福</div>
           </div>
-          <!-- 行3 -->
           <div class="guide-area-card empty"></div>
           <div class="guide-area-card">
             <div class="guide-area-dir">S · 南</div>
@@ -2084,14 +2159,21 @@ body {
         </div>
       </div>
 
+      <!-- 接続線 -->
+      <div class="guide-connector">
+        <div class="guide-connector-line"></div>
+        <div class="guide-connector-dot"></div>
+      </div>
+
       <!-- 専用ガイド -->
       <div class="guide-personal-section">
-        <div class="guide-personal-title" id="guidePersonalTitle">○○様専用ガイド</div>
+        <div class="guide-personal-title" id="guidePersonalTitle">あなた専用ガイド</div>
         <div class="guide-personal-body" id="guidePersonalBody">
           <div id="guidePersonalItems"></div>
           <div class="guide-personal-coming-soon" id="guideComingSoon" style="display:none;">
             <div class="guide-personal-coming-soon-label">COMING SOON</div>
             <div class="guide-personal-coming-soon-text">準備中です</div>
+            <div class="guide-personal-coming-soon-note">本編では、あなたの村に合わせた<br>読み方がここに並びます。</div>
           </div>
         </div>
       </div>
@@ -2139,22 +2221,21 @@ body {
   <!-- しずく取得演出 -->
   <div id="shizukuAcquireFlash" class="shard-acquire-flash">
     <div id="shizukuAcquireGem" class="shard-acquire-gem"></div>
-    <div class="shard-acquire-label">TIAR OBTAINED</div>
+    <div class="shard-acquire-label">SHIZUKU OBTAINED</div>
     <div id="shizukuAcquireName" class="shard-acquire-name"></div>
     <div id="shizukuAcquireArea" class="shard-acquire-area"></div>
     <div class="shard-acquire-tap">タップして続ける</div>
   </div>
 
-  <!-- 村の記録帳（統合コレクション） -->
+  <!-- スフィアの記録（統合コレクション） -->
   <div id="collectionOverlay" class="collection-overlay">
     <div class="collection-top-bar">
-      <span class="collection-top-title">◈ 村の記録帳</span>
+      <span class="collection-top-title">◈ スフィアの記録</span>
       <button id="collectionCloseBtn" class="collection-close-btn">✕ 閉じる</button>
     </div>
     <div class="collection-main-tabs">
-      <button class="collection-main-tab active" id="tabVisits">訪問録</button>
-      <button class="collection-main-tab" id="tabSpheres">スフィア</button>
-      <button class="collection-main-tab" id="tabShizuku">ティア</button>
+      <button class="collection-main-tab active" id="tabSpheres">スフィア</button>
+      <button class="collection-main-tab" id="tabShizuku">しずく</button>
     </div>
     <!-- スフィアセクション -->
     <div id="sectionSpheres" class="collection-section active">
@@ -2172,10 +2253,6 @@ body {
         <div class="shard-area-tabs" id="shizukuAreaTabs"></div>
         <div class="shard-book-content" id="shizukuContent"></div>
       </div>
-    </div>
-    <!-- 訪問録セクション -->
-    <div id="sectionVisits" class="collection-section">
-      <div id="visitRecordInner"></div>
     </div>
   </div>
 </div>
@@ -2202,8 +2279,7 @@ const CLIENT = {
   params: { north: 0, east: 70, south: 42, west: 15, central: 69 },
   stars: ["石門星", "司禄星", "牽牛星", "石門星", "禄存星"],
   meishiki: "戊午・乙卯・甲戌",  // サンプル命式（data.jsonで上書き）
-  guidePersonal: null,
-  achievements: null
+  guidePersonal: null
 };
 
 fetch(`${clientBase}data.json`)
@@ -2214,7 +2290,6 @@ fetch(`${clientBase}data.json`)
     if (data.meishiki) CLIENT.meishiki = data.meishiki;
     if (data.stars) CLIENT.stars = data.stars;
     if (data.guidePersonal) CLIENT.guidePersonal = data.guidePersonal;
-    if (data.achievements) CLIENT.achievements = data.achievements;
 
     // キャラ画像・名前
     const img = document.getElementById('charImg');
@@ -2272,7 +2347,7 @@ const introScenes = [
     name: "ロアン",
     text: "今日のご予定をお伺いします。",
     charMode: "bust",
-    choices: ["外へ出る", "村役場へ行く", "村の記録帳を見る", "今日の占い", "ロアンに話しかける"]
+    choices: ["外へ出る", "村役場へ行く", "スフィアの記録を見る", "今日の占い", "ロアンに話しかける"]
   }
 ];
 
@@ -2724,7 +2799,6 @@ const northAreaScenes = [
   // ③ 到着：北エリア（風景を主役に）
   {
     bg: "bg-north",
-    achievementScene: "north_area",
     char: true,
     monitor: false,
     name: "ロアン",
@@ -2982,161 +3056,9 @@ function updateSpherePanel() {
   }
 }
 
-// ── 村の記録帳（統合コレクション） ──
-let currentCollectionTab = "visits"; // "visits" | "spheres" | "shizuku"
+// ── スフィアの記録（統合コレクション） ──
+let currentCollectionTab = "spheres"; // "spheres" | "shizuku"
 let currentShizukuTab = "north";
-
-// ── 訪問録（実績）システム ──
-const ACH_KEY = `fv_ach_${clientId}`;
-
-function getUnlockedAchievements() {
-  try { return new Set(JSON.parse(localStorage.getItem(ACH_KEY) || '[]')); }
-  catch(e) { return new Set(); }
-}
-
-function unlockAchievement(id) {
-  const set = getUnlockedAchievements();
-  if (set.has(id)) return;
-  set.add(id);
-  try { localStorage.setItem(ACH_KEY, JSON.stringify([...set])); } catch(e) {}
-  showAchievementToast(id);
-  if ($("collectionOverlay").classList.contains("visible") && currentCollectionTab === "visits") {
-    updateVisitRecordPanel();
-  }
-}
-
-function unlockByScene(sceneId) {
-  if (!CLIENT.achievements) return;
-  Object.values(CLIENT.achievements).flat()
-    .filter(a => a.type === 'A' && a.trigger?.scene === sceneId)
-    .forEach(a => unlockAchievement(a.id));
-}
-
-function unlockByChoice(choiceId) {
-  if (!CLIENT.achievements) return;
-  Object.values(CLIENT.achievements).flat()
-    .filter(a => a.type === 'B' && a.trigger?.choice === choiceId)
-    .forEach(a => unlockAchievement(a.id));
-}
-
-function showAchievementToast(id) {
-  if (!CLIENT.achievements) return;
-  const item = Object.values(CLIENT.achievements).flat().find(a => a.id === id);
-  if (!item) return;
-  const msg = document.createElement("div");
-  msg.style.cssText = `
-    position:fixed;bottom:230px;left:50%;transform:translateX(-50%);
-    z-index:60;padding:9px 18px;border-radius:999px;
-    background:rgba(12,6,22,0.96);border:1px solid rgba(216,185,120,0.55);
-    color:rgba(216,185,120,0.95);font-size:11px;letter-spacing:0.14em;
-    font-family:"Hiragino Mincho ProN","Yu Mincho",serif;
-    white-space:nowrap;opacity:0;transition:opacity 350ms;pointer-events:none;
-  `;
-  msg.textContent = `✦ 記録 — ${item.label}`;
-  document.getElementById("app").appendChild(msg);
-  setTimeout(() => { msg.style.opacity = "1"; }, 30);
-  setTimeout(() => { msg.style.opacity = "0"; setTimeout(() => msg.remove(), 350); }, 2400);
-}
-
-const AREA_CFG_ACH = {
-  north:   { ja:'北',   en:'NORTH',  el:'水', color:'rgba(82,148,190,0.85)',  bg:'rgba(12,28,42,0.85)'  },
-  south:   { ja:'南',   en:'SOUTH',  el:'火', color:'rgba(195,95,80,0.85)',   bg:'rgba(40,14,14,0.85)'  },
-  east:    { ja:'東',   en:'EAST',   el:'木', color:'rgba(88,168,102,0.85)',  bg:'rgba(10,28,14,0.85)'  },
-  west:    { ja:'西',   en:'WEST',   el:'金', color:'rgba(180,168,140,0.85)', bg:'rgba(26,22,14,0.85)'  },
-  central: { ja:'中央', en:'CENTER', el:'土', color:'rgba(216,185,120,0.88)', bg:'rgba(28,18,8,0.85)'   },
-};
-
-function updateVisitRecordPanel() {
-  const inner = $("visitRecordInner");
-  if (!inner) return;
-  const unlocked = getUnlockedAchievements();
-  const achs = CLIENT.achievements || {};
-
-  const allItems = Object.values(achs).flat();
-  const totalDone = allItems.filter(a => unlocked.has(a.id)).length;
-  const totalAll  = allItems.length;
-  const pct = totalAll ? Math.round(totalDone / totalAll * 100) : 0;
-
-  let html = `
-    <div style="padding:10px 14px 6px;border-bottom:1px solid rgba(216,185,120,0.1);background:rgba(10,5,16,0.6)">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
-        <span style="font-size:10px;letter-spacing:0.12em;color:rgba(216,185,120,0.6)">訪問記録の達成度</span>
-        <span style="font-size:12px;color:rgba(216,185,120,0.9);font-family:Georgia,serif">${totalDone} / ${totalAll}</span>
-      </div>
-      <div style="height:3px;border-radius:99px;background:rgba(255,255,255,0.08);overflow:hidden">
-        <div style="height:100%;border-radius:99px;width:${pct}%;background:linear-gradient(90deg,rgba(141,89,96,0.9),rgba(216,185,120,0.9))"></div>
-      </div>
-    </div>`;
-
-  AREA_KEYS.forEach(key => {
-    const cfg = AREA_CFG_ACH[key];
-    const items = achs[key] || [];
-
-    if (items.length === 0) {
-      html += `
-        <div style="border-bottom:1px solid rgba(216,185,120,0.08)">
-          <div style="display:flex;align-items:center;gap:10px;padding:8px 14px;background:${cfg.bg}">
-            <div style="width:28px;height:28px;border-radius:50%;border:1px solid ${cfg.color};
-              display:flex;align-items:center;justify-content:center;
-              font-size:11px;color:${cfg.color};font-family:Georgia,serif;opacity:0.45">${cfg.ja}</div>
-            <div>
-              <div style="font-size:9px;letter-spacing:0.22em;color:${cfg.color};opacity:0.5;font-family:Georgia,serif">${cfg.en} · ${cfg.el}</div>
-              <div style="font-size:11px;letter-spacing:0.1em;color:rgba(250,230,202,0.42)">${cfg.ja}エリア
-                <span style="font-size:9px;opacity:0.5">— 準備中</span></div>
-            </div>
-          </div>
-        </div>`;
-      return;
-    }
-
-    const doneCnt = items.filter(a => unlocked.has(a.id)).length;
-    const allDone = doneCnt === items.length;
-
-    html += `
-      <div style="border-bottom:1px solid rgba(216,185,120,0.08)">
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 14px;background:${cfg.bg}">
-          <div style="width:28px;height:28px;border-radius:50%;border:1px solid ${cfg.color};
-            display:flex;align-items:center;justify-content:center;
-            font-size:11px;color:${cfg.color};font-family:Georgia,serif">${cfg.ja}</div>
-          <div style="flex:1">
-            <div style="font-size:9px;letter-spacing:0.22em;color:${cfg.color};font-family:Georgia,serif">${cfg.en} · ${cfg.el}</div>
-            <div style="font-size:11px;letter-spacing:0.1em;color:rgba(250,230,202,0.82)">${cfg.ja}エリア${allDone ? ' <span style="color:rgba(216,185,120,0.9)">✦ コンプリート</span>' : ''}</div>
-          </div>
-          <div style="font-size:10px;color:${cfg.color};font-family:Georgia,serif">${doneCnt}/${items.length}</div>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);padding:10px 8px 6px">
-          ${items.map(a => {
-            const on = unlocked.has(a.id);
-            const isB = a.type === 'B';
-            return `
-            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 3px">
-              <div style="width:46px;height:46px;border-radius:50%;
-                border:1.5px solid ${on ? cfg.color : 'rgba(255,255,255,0.1)'};
-                display:flex;align-items:center;justify-content:center;
-                background:rgba(255,255,255,${on ? '0.04' : '0.01'});
-                opacity:${on ? '1' : '0.38'};
-                ${on ? 'box-shadow:0 0 10px rgba(216,185,120,0.18);' : ''}">
-                <span style="font-size:15px;color:${on ? cfg.color : 'rgba(255,255,255,0.25)'}">
-                  ${on ? (isB ? '★' : '◈') : '✦'}
-                </span>
-              </div>
-              <div style="font-size:9px;letter-spacing:0.03em;text-align:center;line-height:1.3;max-width:62px;
-                color:${on ? 'rgba(250,230,202,0.85)' : 'rgba(250,230,202,0.35)'}">
-                ${a.label}
-              </div>
-            </div>`;
-          }).join('')}
-        </div>
-      </div>`;
-  });
-
-  html += `<div style="text-align:center;padding:14px 20px;font-size:10px;letter-spacing:0.1em;
-    color:rgba(250,230,202,0.28);line-height:1.9">
-    鑑定ページを開くと<br>対応する記録が自動で刻まれます
-  </div>`;
-
-  inner.innerHTML = html;
-}
 
 function openCollection() {
   initSphereSlots();
@@ -3151,13 +3073,12 @@ function closeCollection() {
 
 function switchCollectionTab(tab) {
   currentCollectionTab = tab;
-  ["spheres","shizuku","visits"].forEach(t => {
+  ["spheres","shizuku"].forEach(t => {
     $("section" + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle("active", t === tab);
     $("tab"    + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle("active", t === tab);
   });
   if (tab === "spheres") updateSpherePanel();
   if (tab === "shizuku") { buildShizukuTabs(); renderShizukuSection(currentShizukuTab); }
-  if (tab === "visits")  updateVisitRecordPanel();
 }
 
 // ── しずくシステム（旧：かけら） ──
@@ -3208,7 +3129,7 @@ function showShizukuAcquireFlash(areaKey, starName, onClose) {
   gem.style.setProperty("--shard-color", sphere.color);
   gem.style.setProperty("--shard-dark",  sphere.dark);
   gem.style.setProperty("--shard-glow",  sphere.glow);
-  $("shizukuAcquireName").textContent = sphere.name.replace("・スフィア","") + "のティア";
+  $("shizukuAcquireName").textContent = sphere.name.replace("・スフィア","") + "のしずく";
   $("shizukuAcquireArea").textContent = AREA_NAMES[areaKey] + "エリア";
   flash.classList.add("show");
   const close = () => {
@@ -3297,7 +3218,7 @@ function renderShizukuSection(areaKey) {
       <div class="shard-gem ${got ? "" : "locked"}"
            style="--shard-color:${sphere.color};--shard-dark:${sphere.dark};--shard-glow:${sphere.glow}"></div>
       <div class="shard-item-info">
-        <div class="shard-item-star">${shortName}のティア</div>
+        <div class="shard-item-star">${shortName}のしずく</div>
         <div class="shard-item-status ${got ? "got" : "not"}">${got ? "✦ 入手済み" : "◌ 未入手"}</div>
       </div>
     `;
@@ -3309,7 +3230,7 @@ function renderShizukuSection(areaKey) {
   if (SHOW_TEST_TOOLS) {
     const debug = document.createElement("div");
     debug.className = "shard-debug";
-    debug.innerHTML = `<div class="shard-debug-title">🔧 テスト用 — ティア取得</div><div class="shard-debug-btns" id="shizukuDebugBtns_${areaKey}"></div>`;
+    debug.innerHTML = `<div class="shard-debug-title">🔧 テスト用 — しずく取得</div><div class="shard-debug-btns" id="shizukuDebugBtns_${areaKey}"></div>`;
     content.appendChild(debug);
     const btnsEl = debug.querySelector(`#shizukuDebugBtns_${areaKey}`);
     ALL_STARS.forEach(star => {
@@ -3317,7 +3238,7 @@ function renderShizukuSection(areaKey) {
       const btn = document.createElement("button");
       btn.className = "shard-debug-btn";
       const sp = STAR_TO_SPHERE[star];
-      btn.textContent = sp ? sp.name.replace("・スフィア","") : "ティア";
+      btn.textContent = sp ? sp.name.replace("・スフィア","") : "しずく";
       btn.addEventListener("click", (e) => { e.stopPropagation(); collectShizuku(areaKey, star); });
       btnsEl.appendChild(btn);
     });
@@ -3654,7 +3575,6 @@ function renderScene() {
   setMonitor(s.monitorType);
   $("name").textContent = s.name;
   typeText(s.text);
-  if (s.achievementScene) unlockByScene(s.achievementScene);
   const total = currentSceneSet.length;
   $("progressBar").style.width = `${((sceneIndex + 1) / total) * 100}%`;
   renderChoices(s.choices);
@@ -3728,7 +3648,7 @@ function renderChoices(choices) {
         } else if (["村の強みを活かす","村の課題を解決する","他の村との交易","今年の村の計画","今後の村の展望","村について深く知る"].includes(label)) {
           pushBack(() => { currentScreen='area'; currentSceneSet=councilScenes; sceneIndex=1; renderScene(); });
           transitionScene(() => { box.style.display="none"; currentSceneSet=councilScenes; sceneIndex=1; renderScene(); });
-        } else if (label === "村の記録帳を見る") {
+        } else if (label === "スフィアの記録を見る") {
           box.style.display="none"; openCollection();
         } else if (label === "ロアンに話しかける") {
           box.style.display="none"; openChat();
@@ -4009,7 +3929,7 @@ function showGuideBoardOverlay() {
   if (personal?.clientName) {
     title.textContent = personal.clientName + "様専用ガイド";
   } else {
-    title.textContent = "専用ガイド";
+    title.textContent = "あなた専用ガイド";
   }
 
   items.innerHTML = "";
@@ -4604,12 +4524,11 @@ $("btnContinue").addEventListener("click", async (e) => {
   renderScene();
 });
 
-// ── 村の記録帳（統合コレクション） ──
+// ── スフィアの記録（統合コレクション） ──
 $("collectionCloseBtn").addEventListener("click", (e) => { e.stopPropagation(); closeCollection(); });
 $("collectionOverlay").addEventListener("click", (e) => e.stopPropagation());
 $("tabSpheres").addEventListener("click", (e) => { e.stopPropagation(); switchCollectionTab("spheres"); });
 $("tabShizuku").addEventListener("click",  (e) => { e.stopPropagation(); switchCollectionTab("shizuku"); });
-$("tabVisits").addEventListener("click",   (e) => { e.stopPropagation(); switchCollectionTab("visits"); });
 $("sphereAcquireFlash").addEventListener("click", (e) => e.stopPropagation());
 $("shizukuAcquireFlash").addEventListener("click", (e) => e.stopPropagation());
 
