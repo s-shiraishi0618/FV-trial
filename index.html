@@ -835,6 +835,34 @@ body {
   width: 100%;
   max-width: 320px;
 }
+.home-update-info {
+  width: 100%;
+  max-width: 320px;
+  margin-top: -6px;
+  padding: 9px 14px 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(216,185,120,0.28);
+  background: rgba(18,10,24,0.48);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.06);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+.home-update-label {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: rgba(216,185,120,0.56);
+  font-family: "Hiragino Mincho ProN","Yu Mincho",serif;
+  margin-bottom: 3px;
+  text-align: center;
+}
+.home-update-text {
+  font-size: 10.5px;
+  line-height: 1.55;
+  letter-spacing: 0.04em;
+  color: rgba(255,235,195,0.72);
+  font-family: "Hiragino Mincho ProN","Yu Mincho",serif;
+  text-align: center;
+}
 .home-btn {
   width: 100%;
   padding: 16px 24px;
@@ -1681,7 +1709,7 @@ body {
   <!-- 村のパラメータパネル -->
   <div id="paramPanel" class="param-panel">
     <div class="panel-header">
-      <span class="panel-title">村のスフィア・エネルギー</span>
+      <span class="panel-title">村のスフィアエネルギー</span>
     </div>
     <div class="param-body">
       <!-- モード切替ボタン -->
@@ -1691,8 +1719,8 @@ body {
         <button class="param-mode-btn" data-mode="day" onclick="setParamMode('day')">今日</button>
       </div>
       <div class="param-mode-caption" id="paramModeCaption">
-        <div class="param-mode-kicker" id="paramModeKicker">宿命の地図</div>
-        <div class="param-mode-desc" id="paramModeDesc">この村に刻まれた、基礎となる力のかたちです。</div>
+        <div class="param-mode-kicker" id="paramModeKicker">村のエネルギー</div>
+        <div class="param-mode-desc" id="paramModeDesc">村に流れる固有のスフィアエネルギーを表示します。</div>
       </div>
       <!-- レーダーチャート -->
       <svg class="radar-svg" viewBox="0 0 160 160" overflow="visible">
@@ -1938,7 +1966,11 @@ body {
       <button class="home-btn" id="btnVillage">村長の家へ</button>
       <button class="home-btn disabled">準備中</button>
     </div>
-    <div class="home-version">α ver. 0.2.37</div>
+    <div id="homeUpdateInfo" class="home-update-info">
+      <div class="home-update-label">更新情報</div>
+      <div class="home-update-text">α ver.0.2.38｜村のスフィアエネルギーに、今月と今日の巡りが重なるようになりました</div>
+    </div>
+    <div class="home-version">α ver. 0.2.39</div>
   </div>
 
   <!-- FVについて テキストページオーバーレイ -->
@@ -2343,6 +2375,36 @@ function calcGogyouWithExtra(meishiki, extraKan, extraShi) {
 let currentParamMode = 'base';
 let _overlayRafId = null;
 
+let _meterRafId = null;
+let _meterDisplayValues = null;
+
+function animateMeterValues(targetValues) {
+  if (_meterRafId !== null) { cancelAnimationFrame(_meterRafId); _meterRafId = null; }
+  const from = _meterDisplayValues ? [..._meterDisplayValues] : paramData.map(p => p.value);
+  const to = targetValues;
+  const duration = 900;
+  const start = performance.now();
+  function easeOut(t) { return 1 - Math.pow(1-t, 3); }
+  function step(now) {
+    const raw = Math.min((now - start) / duration, 1);
+    const progress = easeOut(raw);
+    const current = from.map((f, i) => f + (to[i] - f) * progress);
+    _meterDisplayValues = current;
+    document.querySelectorAll('.meter-fill').forEach((el, i) => {
+      el.style.width = Math.min(Math.round(current[i]), 100) + '%';
+    });
+    document.querySelectorAll('.meter-value').forEach((el, i) => {
+      const v = Math.round(current[i]);
+      el.innerHTML = v > 100
+        ? `<span style="color:rgba(184,142,68,1);font-weight:600">${v}↑</span>`
+        : `${v}`;
+    });
+    if (raw < 1) _meterRafId = requestAnimationFrame(step);
+    else { _meterDisplayValues = [...to]; _meterRafId = null; }
+  }
+  _meterRafId = requestAnimationFrame(step);
+}
+
 function setParamCaption(kicker, desc) {
   document.getElementById('paramModeKicker').textContent = kicker;
   document.getElementById('paramModeDesc').textContent = desc;
@@ -2355,8 +2417,9 @@ function setParamMode(mode) {
     btn.classList.toggle('active', btn.dataset.mode === mode)
   );
   if (mode === 'base') {
-    setParamCaption('宿命の地図', 'この村に刻まれた、基礎となる力のかたちです。');
+    setParamCaption('村のエネルギー', '村に流れる固有のスフィアエネルギーを表示します。');
     animateRadarOverlay(null);
+    animateMeterValues(paramData.map(p => p.value));
     return;
   }
   const today = new Date();
@@ -2368,12 +2431,13 @@ function setParamMode(mode) {
   }
   const scores = calcGogyouWithExtra(meishiki, kan, shi);
   if (mode === 'day') {
-    setParamCaption(`今日の巡り：${kan}${shi}`, '今日だけ村に流れ込む、短い気配です。');
+    setParamCaption(`今日のスフィアエネルギー：${kan}${shi}`, '村のエネルギーに、今日のスフィアエネルギーを加えて表示します。');
   } else {
-    setParamCaption(`今月の巡り：${kan}${shi}`, '宿命の地図に、今月の気配が重なっています。');
+    setParamCaption(`今月のスフィアエネルギー：${kan}${shi}`, '村のエネルギーに、今月のスフィアエネルギーを加えて表示します。');
   }
   const overlay = paramData.map(p => scores[p.key] ?? 0);
   animateRadarOverlay(overlay);
+  animateMeterValues(overlay);
 }
 
 function animateRadarOverlay(targetValues) {
