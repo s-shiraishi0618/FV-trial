@@ -237,7 +237,7 @@
   gap: 10px;
   padding-top: 16px;
 }
-/* 今月・本日モード時、宿命線を控えめに */
+/* 今月・今日モード時、宿命線を控えめに */
 #paramPanel[data-param-mode="month"] #radarData,
 #paramPanel[data-param-mode="day"] #radarData {
   fill-opacity: 0.06;
@@ -1681,14 +1681,14 @@ body {
   <!-- 村のパラメータパネル -->
   <div id="paramPanel" class="param-panel">
     <div class="panel-header">
-      <span class="panel-title">村のパラメータ</span>
+      <span class="panel-title">村のスフィア・エネルギー</span>
     </div>
     <div class="param-body">
       <!-- モード切替ボタン -->
       <div class="param-mode-btns">
         <button class="param-mode-btn active" data-mode="base" onclick="setParamMode('base')">宿命</button>
         <button class="param-mode-btn" data-mode="month" onclick="setParamMode('month')">今月</button>
-        <button class="param-mode-btn" data-mode="day" onclick="setParamMode('day')">本日</button>
+        <button class="param-mode-btn" data-mode="day" onclick="setParamMode('day')">今日</button>
       </div>
       <div class="param-mode-caption" id="paramModeCaption">
         <div class="param-mode-kicker" id="paramModeKicker">宿命の地図</div>
@@ -1709,7 +1709,7 @@ body {
         <line class="radar-axis" id="ax4" x1="80" y1="80" x2="0" y2="0"/>
         <!-- データ（宿命ベース） -->
         <polygon class="radar-data" id="radarData" fill="rgb(128,76,84)" fill-opacity="0.12" stroke="rgb(151,109,54)" stroke-opacity="0.75" stroke-width="1.8" points=""/>
-        <!-- データ（今月・本日のオーバーレイ） -->
+        <!-- データ（今月・今日のオーバーレイ） -->
         <polygon id="radarDataOverlay" class="radar-overlay" fill="rgb(184,142,68)" fill-opacity="0" stroke="rgb(184,142,68)" stroke-opacity="0" stroke-width="1.8" points=""/>
         <!-- ラベル（方位） -->
         <text class="radar-label" id="rl0"></text>
@@ -1720,7 +1720,7 @@ body {
       </svg>
       <!-- メーターバー -->
       <div class="meter-list" id="meterList"></div>
-      <div class="param-note">※ 現在はサンプル表示です。<br>命式データ接続後に実際の数値に更新されます。</div>
+
     </div>
   </div>
 
@@ -1938,7 +1938,7 @@ body {
       <button class="home-btn" id="btnVillage">村長の家へ</button>
       <button class="home-btn disabled">準備中</button>
     </div>
-    <div class="home-version">α ver. 0.2.36</div>
+    <div class="home-version">α ver. 0.2.37</div>
   </div>
 
   <!-- FVについて テキストページオーバーレイ -->
@@ -2368,7 +2368,7 @@ function setParamMode(mode) {
   }
   const scores = calcGogyouWithExtra(meishiki, kan, shi);
   if (mode === 'day') {
-    setParamCaption(`本日の巡り：${kan}${shi}`, '今日だけ村に流れ込む、短い気配です。');
+    setParamCaption(`今日の巡り：${kan}${shi}`, '今日だけ村に流れ込む、短い気配です。');
   } else {
     setParamCaption(`今月の巡り：${kan}${shi}`, '宿命の地図に、今月の気配が重なっています。');
   }
